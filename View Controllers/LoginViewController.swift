@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import FirebaseAuth
+import Firebase
+import FirebaseFirestore
+import FirebaseDatabase
 
 class LoginViewController: UIViewController {
 
@@ -19,6 +23,12 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var ErrorLabel: UILabel!
     
+    @IBOutlet weak var navBar: UINavigationBar!
+    
+    
+    @IBOutlet weak var backButton: UIButton!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,6 +36,14 @@ class LoginViewController: UIViewController {
         
          setUpElements()
     }
+    //get user type and return bool (true if organizaion false if personal)
+   // func getUserType(){
+      //  var user = false
+      //  let userType = Constants.db.collection("users").whereField("type", //isEqualTo:  <#T##[Any]#>)
+        
+        
+        
+    //   }
     func setUpElements(){
         
         //Hide the error label
@@ -53,8 +71,55 @@ class LoginViewController: UIViewController {
     }
     */
     
-    
-    @IBAction func loginTapped(_ sender: Any) {
+    @IBAction func backTapped(_ sender: Any) {
     }
     
+    @IBAction func loginTapped(_ sender: Any) {
+        //validate Text Fields
+        //Create Cleaned versions of the text field
+        let email = EmailTextfield.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        let password = passwordTextfield.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+       // let userType =
+        
+        
+        // Signing in the user
+        Auth.auth().signIn(withEmail: email, password: password){
+            (result, error) in
+            
+            if error != nil {
+                //couldn't sign in
+                self.ErrorLabel.text = error!.localizedDescription
+                self.ErrorLabel.alpha = 1
+            }
+            else if let result = result {
+                let uid = result.user.uid
+                let user = Auth.auth().currentUser
+                
+                Database.database().reference().child("users/\(user!.uid)/type").observeSingleEvent(of: .value, with: {
+                    (snapshot) in
+                    
+                    switch snapshot.value as! String {
+                        
+                    case "admin": break
+                        
+                    case "user": break
+                        
+                    default: break
+                        
+                    }
+                })
+                
+                
+                
+                
+                
+                
+                let homeViewController = self.storyboard?.instantiateViewController(withIdentifier: Constants.Storyboard.homeViewController) as? HomeViewController
+                
+                self.view.window?.rootViewController = homeViewController
+                self.view.window?.makeKeyAndVisible()
+            }
+        }
+    }
+  
 }

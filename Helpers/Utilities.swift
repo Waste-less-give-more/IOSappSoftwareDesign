@@ -6,6 +6,7 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 class Utilities {
     
@@ -42,7 +43,31 @@ class Utilities {
         button.layer.cornerRadius = 25.0
         button.tintColor = UIColor.black
     }
-    
+    static func backButton(_ button: UIButton) {
+        //backButton image
+       /* let bundlePath = Bundle.main.path(forResource: "back-button", ofType: "png")
+        guard bundlePath != nil else {
+            return
+            
+        }*/
+        
+        /*let url = URL(fileURLWithPath: bundlePath!)
+               
+        let item = UIImage(
+        let back = UIImage(named: "back-button.png")
+        let bkButton = UIButton(type: .system)
+        bkButton.setImage(back?.withRenderingMode(.alwaysOriginal), for: .normal)
+        bkButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)*/
+        
+        
+        let image = UIImage(named: "back-button.png") as UIImage?
+        let button = UIButton(type: UIButton.ButtonType.custom) as UIButton
+        button.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        button.setImage(image!, for: .normal)
+        //button.addTarget(self, action: "navButtonTapped", for: UIControl.Event)
+        //view.addSubview(button)
+        
+    }
     static func isPasswordValid(_ password : String) -> Bool {
         
         let passwordTest = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[$@$#!%*?&])[A-Za-z\\d$@$#!%*?&]{8,}")
